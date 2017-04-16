@@ -1,0 +1,3 @@
+select[name='pendingUsers_length'],select[name="cateringList_length"]{
+    color: black;
+}
