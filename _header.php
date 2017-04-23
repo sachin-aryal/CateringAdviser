@@ -64,42 +64,59 @@ if(isset($_POST["registerButton"])) {
     }
 }
 ?>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="index.php">Catering Adviser</a>
-        </div>
-        <ul class="nav navbar-nav" style="float: right">
-            <li><a href="search.php">Search</a></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $textMessage ?>  <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <?php
-                    if(!isset($_SESSION["username"])) {
-                        ?>
-                        <li><a style="cursor: pointer" data-toggle="modal" data-target="#loginFormModal">Login</a></li>
-                        <li><a style="cursor: pointer" data-toggle="modal" data-target="#registerFormModal">Register</a></li>
-                        <?php
-                    }else{
-                        if($_SESSION["role"] == "catering") {
-                            ?>
-                            <li><a href='catering.php'>New Catering</a></li>;
+<div class="row">
+    <div class="col-md-12">
+        <nav class="navbar" style="background-color:rgba(34, 3, 34, 0.8);" role="navigation">
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.php">Catering Advisor</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="search.php">Search</a></li>
+                    <li><a href="#">Comparision</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $textMessage ?>  <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
                             <?php
-                        }else if ($_SESSION["role"] == "admin"){
+                            if(!isset($_SESSION["username"])) {
+                                ?>
+                                <li><a style="cursor: pointer" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#loginFormModal">Login</a></li>
+                                <li><a style="cursor: pointer" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#registerFormModal">Register</a></li>
+                                <?php
+                            }else{
+                                if($_SESSION["role"] == "catering") {
+                                    ?>
+                                    <li><a href='catering.php'>New Catering</a></li>;
+                                    <li><a href='myCatering.php'>My Catering</a></li>;
+                                    <?php
+                                }else if ($_SESSION["role"] == "admin"){
+                                    ?>
+                                    <li><a href='pendingUsers.php'>Pending Users</a></li>;
+                                    <?php
+                                }
+                                ?>
+                                <li><a href="controller/logout.php">Logout</a></li>
+                                <?php
+                            }
                             ?>
-                            <li><a href='pendingUsers.php'>Pending Users</a></li>;
-                            <?php
-                        }
-                        ?>
-                        <li><a href="controller/logout.php">Logout</a></li>
-                        <?php
-                    }
-                    ?>
+                        </ul>
+                    </li>
                 </ul>
-            </li>
-        </ul>
+            </div>
+        </nav>
     </div>
-</nav>
+</div>
 
 <div id="loginFormModal" class="modal fade" role="dialog">
     <div class="modal-dialog">

@@ -27,7 +27,7 @@ if(!isset($_GET["id"])){
 <div class="container">
     <div class="row well">
         <div class="col-md-4">
-            <img src="<?php echo $contact["logo"] ?>" class="img-responsive"/>
+            <img class="logo" src="<?php echo $contact["logo"] ?>"/>
         </div>
         <div class="col-md-3">
             <p><?php echo $contact["catering_name"] ?></p>

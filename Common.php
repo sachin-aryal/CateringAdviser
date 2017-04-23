@@ -343,4 +343,12 @@ function generateRandomString($length = 10) {
     }
     return $randomString;
 }
+
+
+function getMyCatering($userId){
+    $userCatering = "SELECT *FROM catering where user_id = $userId";
+    $connection = getConnection();
+    $result = $connection->query($userCatering);
+}
+
 ?>

@@ -1,3 +1,13 @@
-select[name='pendingUsers_length'],select[name="cateringList_length"]{
+select{
+    color: black !important;
+}
+input[type=search]{
     color: black;
+}
+.logo {
+    position: relative;
+    width:  180px;
+    height: 150px;
+    background: no-repeat 50% 50%;
+    background-size: cover;
 }

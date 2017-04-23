@@ -6,10 +6,13 @@
  * Time: 12:42 PM
  */
 
-include "_header.php";
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 if($_SESSION["role"] != "admin"){
     header("Location:index.php");
 }
+include "_header.php";
 $pendingUsers = fetchAllPendingUsers();
 ?>
 <html>
