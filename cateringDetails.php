@@ -1,4 +1,5 @@
 <?php
+$editOption = false;
 if(!isset($_GET["id"])){
     header("Location:search.php");
 }else{
@@ -11,6 +12,9 @@ if(!isset($_GET["id"])){
     $menu = $cateringInfo["menu"];
     $price = $cateringInfo["price"];
     $averagePrice = $price["price"]/$price["no_of_people"];
+    if(isset($_SESSION["user_id"]) && ($contact["user_id"] == $_SESSION["user_id"])){
+        $editOption = true;
+    }
 }
 ?>
 <html>
@@ -184,6 +188,10 @@ if(!isset($_GET["id"])){
         <hr>
         <br>
         <?php
+        if($editOption){
+            echo '<a class="btn btn-info" href="editCatering.php?id='.$contact["id"].'">Edit</a>|';
+            echo '<a class="btn btn-danger" href="deleteCatering.php?id='.$contact["id"].'">Delete</a>';
+        }
     }
     ?>
 </div>

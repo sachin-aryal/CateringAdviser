@@ -1,4 +1,6 @@
-<?php require "Common.php";?>
+<?php
+require_once "Common.php";
+?>
 <script src="assets/js/jquery.min.js" type="text/javascript"></script>
 <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="assets/js/jquery.dataTables.min.js" type="text/javascript"></script>
@@ -13,7 +15,31 @@ if(!isset($_SESSION["username"])) {
     $textMessage = "Welcome ".$_SESSION["username"];
 }
 ?>
-
+<script type="text/javascript">
+    function changePassword(){
+        var oldPassword = $("#oldPassword").val();
+        var newPassword = $("#newPassword").val();
+        var data = {oldPassword:oldPassword,newPassword:newPassword};
+        $.ajax({
+            type: "POST",
+            url: "controller/changePassword.php",
+            data: data,
+            success:function(data){
+                console.log(data);
+                data = JSON.parse(data);
+                if(data.success == true){
+                    alert(data.message+"\nPlease login with new password.");
+                    window.location = "controller/logout.php"
+                }else{
+                    alert(data.message);
+                }
+            },
+            error:function(err){
+                alert("Internal Server Error.")
+            }
+        });
+    }
+</script>
 <?php
 if(isset($_POST["loginButton"])){
     $loginResult = checkLogin();
@@ -80,7 +106,7 @@ if(isset($_POST["registerButton"])) {
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Home</a></li>
+                    <li><a href="index.php">Home</a></li>
                     <li><a href="#">Features</a></li>
                     <li><a href="#">About Us</a></li>
                     <li><a href="search.php">Search</a></li>
@@ -106,6 +132,7 @@ if(isset($_POST["registerButton"])) {
                                     <?php
                                 }
                                 ?>
+                                <li><a style="cursor: pointer" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#changePassword">Change Password</a></li>
                                 <li><a href="controller/logout.php">Logout</a></li>
                                 <?php
                             }
@@ -139,6 +166,9 @@ if(isset($_POST["registerButton"])) {
                         <div class="form-group">
                             <br><input type="submit" value="Login" name="loginButton" class="btn btn-default"/>
                         </div>
+                        <div class="form-group">
+                            <a style="cursor: pointer" href="forgetPassword.php">Forget Password</a>
+                        </div>
                     </fieldset>
                 </form>
             </div>
@@ -170,6 +200,34 @@ if(isset($_POST["registerButton"])) {
                         </div>
                         <div class="form-group">
                             <br><input type="submit" value="Register" name="registerButton" class="btn btn-default"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="changePassword" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Change Password</h4>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" class="form" method="post" action="">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="username">Old Password</label>
+                            <input type="password" id="oldPassword" name="oldPassword" placeholder="Old Password" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">New Password</label>
+                            <input type="password" id="newPassword" name="newPassword" placeholder="New Password" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <br><input onclick="changePassword();" type="button" value="Change" name="changeButton" class="btn btn-default"/>
                         </div>
                     </fieldset>
                 </form>

@@ -102,7 +102,25 @@ function storeCatering(){
         saveVenueInfo($cateringId);
         saveFacility($cateringId);
         saveFoodMenu($cateringId);
+        savePrice($cateringId);
     }
+}
+
+function updateCatering(){
+    $cateringId = $_POST["cId"];
+    updateCateringInfo($cateringId);
+    updateVenueInfo($cateringId);
+    updateFacility($cateringId);
+    updateFoodMenu($cateringId);
+    updatePrice($cateringId);
+}
+
+function deleteCatering($cateringId){
+    deleteFoodMenu($cateringId);
+    deletePrice($cateringId);
+    deleteFacility($cateringId);
+    deleteVenue($cateringId);
+    deleteCateringContact($cateringId);
 }
 
 function saveCateringInfo(){
@@ -143,6 +161,63 @@ function saveCateringInfo(){
     return $cateringId;
 }
 
+
+function updateCateringInfo($id){
+    $cateringName = $_POST["cateringName"];
+    $establishDate = $_POST["establishDate"];
+    $pan = $_POST["pan"];
+    $vat = $_POST["vat"];
+    $firstName = $_POST["firstName"];
+    $lastName = $_POST["lastName"];
+    $designation = $_POST["designation"];
+    $phoneNo1 = $_POST["phoneNo1"];
+    $phoneNo2 = $_POST["phoneNo2"];
+    $emailId = $_POST["emailId"];
+    $website = $_POST["website"];
+    $zone = $_POST["zone"];
+    $district = $_POST["district"];
+    $area = $_POST["area"];
+    $street = $_POST["street"];
+    $nearestLandmark = $_POST["nearestLandmark"];
+    $building = $_POST["building"];
+    $floor = $_POST["floor"];
+    $logoName = uploadLogo();
+    $updateContactInfo = "UPDATE catering set 
+                          catering_name = '$cateringName',
+                          established_date = '$establishDate',
+                          pan_no = '$pan',
+                          vat_no = '$vat',
+                          first_name = '$firstName',
+                          last_name = '$lastName',
+                          designation = '$designation',
+                          phone_no1 = '$phoneNo1',
+                          phone_no2 = '$phoneNo2',
+                          email_id = '$emailId',
+                          website = '$website',
+                          zone = '$zone',
+                          district = '$district',
+                          area = '$area',
+                          street = '$street',
+                          nearest_landmark = '$nearestLandmark',
+                          building = '$building',
+                          floor = '$floor'";
+    if($logoName != "Not Available."){
+        $updateContactInfo.=",logo = '$logoName'";
+    }
+
+    $updateContactInfo.=" WHERE id = $id";
+
+    $connection = getConnection();
+    $connection->query($updateContactInfo);
+    $connection->close();
+}
+
+function deleteCateringContact($cateringId){
+    $connection = getConnection();
+    $connection->query("DELETE FROM catering where id = $cateringId");
+    $connection->close();
+}
+
 function saveVenueInfo($cateringId){
     $openingTime = $_POST["openingTime"];
     $closingTime = $_POST["closingTime"];
@@ -172,6 +247,55 @@ function saveVenueInfo($cateringId){
     $connection->close();
 }
 
+function updateVenueInfo($id){
+    $openingTime = $_POST["openingTime"];
+    $closingTime = $_POST["closingTime"];
+    $musicEnd = $_POST["musicEnd"];
+    $indoorSize = $_POST["indoorSize"];
+    $iMaxCapacity = $_POST["iMaxCapacity"];
+    $outdoorSize = $_POST["outdoorSize"];
+    $oMaxCapacity = $_POST["oMaxCapacity"];
+    $venueSize = $_POST["venueSize"];
+    $noOfHall = $_POST["noOfHall"];
+    $parkingSize = $_POST["parkingSize"];
+    $noOfServers = $_POST["noOfServers"];
+    $noOfBar = $_POST["noOfBar"];
+    $noOfHelpers = $_POST["noOfHelpers"];
+    $noOfCooks = $_POST["noOfCooks"];
+    $noOfCleaners = $_POST["noOfCleaners"];
+    $noOfOthers = $_POST["noOfOthers"];
+    $noOfGuards = $_POST["noOfGuards"];
+
+    $updateVenueQuery = "UPDATE venue set 
+                          opening_time = '$openingTime',
+                          closing_time = '$closingTime',
+                          music_end = '$musicEnd',
+                          indoor_size = '$indoorSize',
+                          i_max_capacity = $iMaxCapacity,
+                          outdoor_size = '$outdoorSize',
+                          o_max_capacity = $oMaxCapacity,
+                          venue_size = '$venueSize',
+                          parking_size = '$parkingSize',
+                          no_of_halls = $noOfHall,
+                          no_of_servers = $noOfServers,
+                          no_of_bars = $noOfBar,
+                          no_of_helpers = $noOfHelpers,
+                          no_of_cleaners = $noOfCleaners,
+                          no_of_others = $noOfOthers,
+                          no_of_guards = $noOfGuards,
+                          no_of_cooks = $noOfCooks WHERE catering_id = $id";
+
+    $connection = getConnection();
+    $connection->query($updateVenueQuery);
+    $connection->close();
+}
+
+function deleteVenue($cateringId){
+    $connection = getConnection();
+    $connection->query("DELETE FROM venue where catering_id = $cateringId");
+    $connection->close();
+}
+
 function saveFacility($cateringId){
     if(isset($_POST['facility'])) {
         $facilities = $_POST["facility"];
@@ -182,6 +306,16 @@ function saveFacility($cateringId){
         }
         $connection->close();
     }
+}
+
+function updateFacility($cateringId){
+    deleteFacility($cateringId);
+    saveFacility($cateringId);
+}
+
+function deleteFacility($cateringId){
+    $connection = getConnection();
+    $connection->query("DELETE FROM facility where catering_id = $cateringId");
 }
 
 function saveFoodMenu($cateringId){
@@ -195,8 +329,6 @@ function saveFoodMenu($cateringId){
     $hardDrinks = $_POST["hardDrinks"];
     $hotDrinks = $_POST["hotDrinks"];
     $soup = $_POST["soup"];
-    $noOfPeople = $_POST["noOfPeople"];
-    $price = $_POST["price"];
 
     $connection = getConnection();
     $vegSnacks == ""?:insertToFoodMenu("Veg Snacks",$vegSnacks,$connection,$cateringId);
@@ -210,9 +342,7 @@ function saveFoodMenu($cateringId){
     $hotDrinks == ""?:insertToFoodMenu("Hot Drinks",$hotDrinks,$connection,$cateringId);
     $soup == ""?:insertToFoodMenu("Soup",$soup,$connection,$cateringId);
     isset($_POST["bbq"])?insertToFoodMenu("BBQ","Yes",$connection,$cateringId):insertToFoodMenu("BBQ","No",$connection,$cateringId);
-
-    $priceQuery = "INSERT INTO price VALUES (NULL, $noOfPeople,$price,$cateringId)";
-    $connection->query($priceQuery);
+    $connection->close();
 }
 
 function insertToFoodMenu($category,$items,$connection,$cateringId){
@@ -220,13 +350,49 @@ function insertToFoodMenu($category,$items,$connection,$cateringId){
     $connection->query($foodMenuQuery);
 }
 
+function updateFoodMenu($cateringId){
+    deleteFoodMenu($cateringId);
+    saveFoodMenu($cateringId);
+}
+
+function deleteFoodMenu($cateringId){
+    $connection = getConnection();
+    $connection->query("DELETE FROM menu where catering_id = $cateringId");
+    $connection->close();
+}
+
+function savePrice($cateringId){
+    $noOfPeople = $_POST["noOfPeople"];
+    $price = $_POST["price"];
+
+    $connection = getConnection();
+    $priceQuery = "INSERT INTO price VALUES (NULL, $noOfPeople,$price,$cateringId)";
+    $connection->query($priceQuery);
+    $connection->close();
+}
+
+function updatePrice($cateringId){
+    deletePrice($cateringId);
+    savePrice($cateringId);
+}
+
+function deletePrice($cateringId){
+    $connection = getConnection();
+    $connection->query("DELETE FROM price where catering_id = $cateringId");
+    $connection->close();
+}
+
 function uploadLogo(){
     $target_dir = "uploads/";
     $target_file = $target_dir . $_POST["cateringName"]."_".generateRandomString()."_logo.jpg";
-    if (move_uploaded_file($_FILES["logo"]["tmp_name"], $target_file)) {
-        $logoName = $target_file;
-    } else {
+    if(!file_exists($_FILES['logo']['tmp_name']) || !is_uploaded_file($_FILES['logo']['tmp_name'])) {
         $logoName = "Not Available.";
+    }else{
+        if (move_uploaded_file($_FILES["logo"]["tmp_name"], $target_file)) {
+            $logoName = $target_file;
+        } else {
+            $logoName = "Not Available.";
+        }
     }
     return $logoName;
 }
@@ -349,6 +515,49 @@ function getMyCatering($userId){
     $userCatering = "SELECT *FROM catering where user_id = $userId";
     $connection = getConnection();
     $result = $connection->query($userCatering);
+    $data = array();
+    if($result->num_rows > 0){
+        $i = 0;
+        while ($row = $result->fetch_assoc()){
+            $data[$i++] = $row;
+        }
+    }
+    return $data;
 }
+
+function changePassword(){
+    $oldPassword = crypt($_POST["oldPassword"],'cateringadviser');
+    $newPassword = crypt($_POST["newPassword"],'cateringadviser');
+    $userName = $_SESSION["username"];
+
+    $connection = getConnection();
+    $userQuery = "SELECT *FROM users where username = '$userName'";
+    $result = $connection->query($userQuery);
+    $row = $result->fetch_assoc();
+    $dbOldPassword = $row["password"];
+    if($dbOldPassword != $oldPassword){
+        return array("success"=>false,"message"=>"Entered old password is invalid.");
+    }
+    $pwUpdateQuery = "UPDATE users set password = '$newPassword' where username = '$userName'";
+    if($connection->query($pwUpdateQuery)){
+        return array("success"=>true,"message"=>"Password changed successfully.");
+    }else{
+        return array("success"=>false,"message"=>"Unknown internal server error.");
+    }
+}
+
+function resetPassword($username){
+    $password = generateRandomString();
+    $encPassword = crypt($password,'cateringadviser');
+
+    $connection = getConnection();
+    $pwUpdateQuery = "UPDATE users set password = '$encPassword' where username = '$username'";
+    if($connection->query($pwUpdateQuery)){
+        return array("success"=>true,"newPassword"=>$password);
+    }else{
+        return array("success"=>false);
+    }
+}
+
 
 ?>
