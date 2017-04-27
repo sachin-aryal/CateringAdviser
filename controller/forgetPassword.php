@@ -39,8 +39,8 @@ function sendNewPassword($username, $password){
     $mailer->SMTPSecure = 'tls';
     $mailer->Host = 'smtp.gmail.com';
     $mailer->Port = 587;
-    $mailer->Username = 'saaryal51@gmail.com';
-    $mailer->Password = 'majuwasachin69';
+    $mailer->Username = ''; // Email
+    $mailer->Password = ''; // Password
     $mailer->SMTPAuth = true;
     $mailer->From = 'saaryal51@gmail.com';
     $mailer->FromName = 'Catering Adviser';
