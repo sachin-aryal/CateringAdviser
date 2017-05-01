@@ -5,7 +5,7 @@
  * Date: 4/8/17
  * Time: 12:48 PM
  */
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
@@ -362,12 +362,15 @@ function deleteFoodMenu($cateringId){
 }
 
 function savePrice($cateringId){
-    $noOfPeople = $_POST["noOfPeople"];
+    $noOfPeopleStart = $_POST["noOfPeopleStart"];
+    $noOfPeopleEnd = $_POST["noOfPeopleEnd"];
     $price = $_POST["price"];
 
     $connection = getConnection();
-    $priceQuery = "INSERT INTO price VALUES (NULL, $noOfPeople,$price,$cateringId)";
-    $connection->query($priceQuery);
+    for($i = 0;$i<sizeof($noOfPeopleStart);$i++){
+        $priceQuery = "INSERT INTO price VALUES (NULL, $noOfPeopleStart[$i],$noOfPeopleEnd[$i],$price[$i],$cateringId)";
+        $connection->query($priceQuery);
+    }
     $connection->close();
 }
 
@@ -497,7 +500,15 @@ function getPriceInfo($id){
     $priceInfo = "SELECT *FROM price where catering_id=$id";
     $connection = getConnection();
     $result = $connection->query($priceInfo);
-    return $result->fetch_assoc();
+    if($result->num_rows > 0){
+        $data = array();
+        $i=0;
+        while ($row = $result->fetch_assoc()){
+            $data[$i++] = $row;
+        }
+        return $data;
+    }
+    return array();
 }
 
 function generateRandomString($length = 10) {
@@ -557,6 +568,19 @@ function resetPassword($username){
     }else{
         return array("success"=>false);
     }
+}
+
+function getPriceByPeople($noOfPeople,$catering_id){
+    $priceQuery = "SELECT *from price where catering_id = $catering_id AND no_of_people_start <= $noOfPeople AND no_of_people_end >= $noOfPeople limit 1";
+    $connection = getConnection();
+    $result = $connection->query($priceQuery);
+    if($result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        return $row["price"];
+    }else{
+        return 0;
+    }
+
 }
 
 

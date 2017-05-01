@@ -41,14 +41,64 @@
 <div class="checkbox">
     <label><input type="checkbox" <?php echo $bbq == "Yes"?"checked":"" ?> name="bbq" id="bbq" value="BBQ">BBQ</label>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <label for="noOfPeople">No Of People</label>
-        <input type="number" value="<?php echo $price["no_of_people"] ?>" name="noOfPeople" id="noOfPeople" placeholder="No Of People" class="form-control"/>
+<?php
+if($isEdit){
+    ?>
+    <div id="priceRange">
+        <h2>Price Range</h2>
+        <?php
+        foreach ($price as $pRange) {
+            ?>
+            <div class="row" id="initialRange">
+                <div class="col-md-3">
+                    <label for="noOfPeopleStart">No Of People (Start)</label>
+                    <input type="number" name="noOfPeopleStart[]" value="<?php echo $pRange["no_of_people_start"] ?>"
+                           id="noOfPeopleStart" placeholder="No Of People" class="form-control"/>
+                </div>
+                <div class="col-md-3">
+                    <label for="noOfPeopleEnd">No Of People (End)</label>
+                    <input type="number" name="noOfPeopleEnd[]" value="<?php echo $pRange["no_of_people_end"] ?>"
+                           id="noOfPeopleEnd" placeholder="No Of People" class="form-control"/>
+                </div>
+                <div class="col-md-3">
+                    <label for="price">Price</label>
+                    <input type="text" name="price[]" id="price" value="<?php echo $pRange["price"] ?>"
+                           placeholder="Rs 1400 Per Head" class="form-control"/>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
     </div>
-    <div class="col-md-4">
-        <label for="price">Price</label>
-        <input type="text" value="<?php echo $price["price"] ?>" name="price" id="price" placeholder="Rs 1400 Per Head" class="form-control"/>
+    <?php
+}else {
+    ?>
+    <div id="priceRange">
+        <h2>Price Range</h2>
+        <div class="row" id="initialRange">
+            <div class="col-md-3">
+                <label for="noOfPeopleStart">No Of People (Start)</label>
+                <input type="number" name="noOfPeopleStart[]"
+                       id="noOfPeopleStart" placeholder="No Of People" class="form-control"/>
+            </div>
+            <div class="col-md-3">
+                <label for="noOfPeopleEnd">No Of People (End)</label>
+                <input type="number" name="noOfPeopleEnd[]"
+                       id="noOfPeopleEnd" placeholder="No Of People" class="form-control"/>
+            </div>
+            <div class="col-md-3">
+                <label for="price">Price</label>
+                <input type="text" name="price[]" id="price"
+                       placeholder="Rs 1400 Per Head" class="form-control"/>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+?>
+<div class="row">
+    <div class="col-md-3">
+        <button type="button" class="btn btn-default" onclick="anotherPriceRange()">Another Price Range</button>
     </div>
 </div>
 <div class="form-group">

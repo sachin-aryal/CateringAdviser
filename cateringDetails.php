@@ -11,7 +11,6 @@ if(!isset($_GET["id"])){
     $facility = $cateringInfo["facility"];
     $menu = $cateringInfo["menu"];
     $price = $cateringInfo["price"];
-    $averagePrice = $price["price"]/$price["no_of_people"];
     if(isset($_SESSION["user_id"]) && ($contact["user_id"] == $_SESSION["user_id"])){
         $editOption = true;
     }
@@ -23,7 +22,19 @@ if(!isset($_GET["id"])){
     <script type="text/javascript">
         function changePrice(){
             var noOfPeople = $("#no_of_people").val();
-            $("#price").val(noOfPeople*$("#averagePrice").val());
+            var catering_id = "<?php echo $contact["id"] ?>";
+            var data = {no_of_people:noOfPeople,catering_id:catering_id};
+            $.ajax({
+                url:"controller/priceCalculation.php",
+                type:"POST",
+                data:data,
+                success:function (data) {
+                    $("#totalCost").val(noOfPeople*data);
+                }
+            });
+
+
+
         }
     </script>
 </head>
@@ -169,20 +180,48 @@ if(!isset($_GET["id"])){
             </div>
         </div>
         <hr>
+        <div id="priceRange">
+            <h3>Price Range</h3>
+            <?php
+            foreach ($price as $pRange) {
+                ?>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="no_of_people_start">Number of People(Start)</label>
+                            <input readonly="readonly" class="form-control" type="number"
+                                   value="<?php echo $pRange["no_of_people_start"] ?>" id="no_of_people_start"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="no_of_people_start">Number of People(End)</label>
+                            <input readonly="readonly" class="form-control" type="number"
+                                   value="<?php echo $pRange["no_of_people_end"] ?>" id="no_of_people_end"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="price">Price(NRs)</label>
+                            <input readonly="readonly" class="form-control" type="number"
+                                   value="<?php echo $pRange["price"] ?>" id="price"/>
+                        </div>
+                    </div>
+                </div>
+                <?php
+            }
+            ?>
+        </div>
         <div class="row">
-            <h3>Price</h3>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="no_of_people">Number of People</label>
-                    <input readonly="readonly" class="form-control" type="number" value="<?php echo $price["no_of_people"] ?>" id="no_of_people" />
+                    <label>No of People</label>
+                    <input type="number" onkeyup="changePrice()" name="no_of_people" id="no_of_people" class="form-control"/>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="price">Price(NRs)</label>
-                    <input readonly="readonly" class="form-control" type="number" value="<?php echo $price["price"] ?>" id="price" />
-                </div>
-                <input type="hidden" id="averagePrice" value="<?php echo $averagePrice ?>"/>
+                <label>Total Cost (NRs)</label>
+                <input type="number" id="totalCost" class="form-control" readonly="readonly"/>
             </div>
         </div>
         <hr>

@@ -27,7 +27,7 @@ if($contact["user_id"] != $_SESSION["user_id"]){
 include "_header.php";
 include "_zoneAndDistrict.php";
 
-
+$isEdit = true;
 $vegSnacks = "";$nonVegSnacks="";
 $mainCourseVeg = "";$mainCourseNonVeg="";
 $salad = "";$pickles="";
@@ -87,6 +87,12 @@ foreach ($menu as $menuItems){
                 $("#secondForm").removeClass("hide");
                 $("#thirdForm").addClass("hide");
             }
+
+            function anotherPriceRange(){
+                var initialRange = $("#initialRange").clone();
+                $("#priceRange").append(initialRange);
+            }
+
         </script>
     </head>
     <body>

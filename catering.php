@@ -7,6 +7,8 @@ if(!isset($_SESSION["username"])){
 }
 include "_header.php";
 include "_zoneAndDistrict.php";
+$isEdit = false;
+
 ?>
 <html>
 <head>
@@ -35,6 +37,12 @@ include "_zoneAndDistrict.php";
             $("#secondForm").removeClass("hide");
             $("#thirdForm").addClass("hide");
         }
+
+        function anotherPriceRange(){
+            var initialRange = $("#initialRange").clone();
+            $("#priceRange").append(initialRange);
+        }
+
     </script>
 </head>
 <body>
